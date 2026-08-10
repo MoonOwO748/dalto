@@ -21,7 +21,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
 
 const metaByLocale: Record<string, { title: string; description: string; ogLocale: string }> = {
   ko: {
-    title: 'AK 달토 강남 가라오케 공식 | 주대 15만 · 9시 전 5만 할인',
+    title: '☎ 010-5704-3097 | 강남 AK달토 공식 | 기본 주대 15만 · 9시전 5만 할인',
     description: '서울 강남구 역삼동 프라이빗 룸 가라오케 AK 달토. 기본 주대 15만원, 오후 9시 이전 방문 시 5만원 할인. 신논현역 4번 출구 도보 3분. 365일 연중무휴. 전화 010-5704-3097.',
     ogLocale: 'ko_KR',
   },
