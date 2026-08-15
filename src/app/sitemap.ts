@@ -3,7 +3,7 @@ import { locales } from '@/app/[lang]/dictionaries'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
 
-const staticPages = ['', '/rooms', '/pricing', '/events', '/menu', '/howto', '/access', '/faq', '/reserve', '/international']
+const staticPages = ['', '/pricing', '/events', '/howto', '/access', '/faq', '/blog', '/reserve']
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return locales.flatMap((locale) =>
