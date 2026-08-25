@@ -1,7 +1,55 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { hasLocale, getDictionary } from '../dictionaries'
 import { getBlogPosts } from '@/lib/wordpress'
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
+
+const blogMeta: Record<string, { title: string; description: string }> = {
+  ko: {
+    title: '공식 블로그 & 가라오케 소식 | 이용 팁 및 주대 정보',
+    description: '강남 가라오케 주대 정보부터 얼리버드 할인 혜택, 비즈니스 VIP 접대 팁, 단체 회식 장소 추천까지 AK 달토 공식 소식.',
+  },
+  en: {
+    title: 'Official Blog & News | Gangnam Karaoke Tips & Guides',
+    description: 'AK Dalto Gangnam official guides: pricing tips, business VIP hosting advice, group party booking guides, and latest updates.',
+  },
+  zh: {
+    title: '官方博客与资讯 | 江南KTV攻略与酒水费信息',
+    description: '首尔江南AK Dalto官方攻略：消费指南、商务VIP接待技巧、团体聚会推荐及最新优惠。',
+  },
+  ja: {
+    title: '公式ブログ・お知らせ | 江南カラオケ利用ガイド',
+    description: '江南AK Dalto公式ガイド：料金節約のコツ、VIP接待マナー、団体予約のご案内、最新情報。',
+  },
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params
+  const m = blogMeta[lang] ?? blogMeta.ko
+
+  return {
+    title: m.title,
+    description: m.description,
+    alternates: {
+      canonical: `${BASE_URL}/${lang}/blog`,
+      languages: {
+        ko: `${BASE_URL}/ko/blog`,
+        en: `${BASE_URL}/en/blog`,
+        'zh-CN': `${BASE_URL}/zh/blog`,
+        ja: `${BASE_URL}/ja/blog`,
+        'x-default': `${BASE_URL}/ko/blog`,
+      },
+    },
+    openGraph: {
+      title: `${m.title} | 강남 AK달토`,
+      description: m.description,
+      url: `${BASE_URL}/${lang}/blog`,
+      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Blog' }],
+    },
+  }
+}
 
 interface Props {
   params: Promise<{ lang: string }>
@@ -37,7 +85,7 @@ export default async function BlogPage({ params }: Props) {
           </h1>
 
           <p className="mt-4 text-sm leading-relaxed md:text-base" style={{ color: 'var(--bone-dim)' }}>
-            강남 가라오케 이용 정보부터 주대 할인 혜택, 비즈니스 접대 노하우까지 달토의 공식 소식을 확인해 보세요. (WordPress CMS 연동 준비 완료)
+            강남 가라오케 이용 정보부터 주대 할인 혜택, 비즈니스 접대 노하우까지 달토의 공식 소식을 확인해 보세요.
           </p>
         </div>
       </section>
@@ -46,9 +94,10 @@ export default async function BlogPage({ params }: Props) {
       <section className="mt-12 md:mt-16">
         <div className="grid gap-6 md:grid-cols-3">
           {posts.map((post) => (
-            <article
+            <Link
               key={post.id}
-              className="glass-card group flex flex-col justify-between overflow-hidden rounded-2xl p-6 md:p-8"
+              href={`/${lang}/blog/${post.slug}`}
+              className="glass-card group flex flex-col justify-between overflow-hidden rounded-2xl p-6 transition-all hover:scale-[1.01] hover:border-accent/30 md:p-8"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -79,7 +128,7 @@ export default async function BlogPage({ params }: Props) {
                   자세히 읽기 →
                 </span>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </section>

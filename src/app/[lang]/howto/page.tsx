@@ -1,7 +1,55 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { hasLocale, getDictionary } from '../dictionaries'
 import { GuideSection } from '@/components/home/GuideSection'
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
+
+const howtoMeta: Record<string, { title: string; description: string }> = {
+  ko: {
+    title: '이용 방법 & 첫 방문 가이드 | 4단계 안심 이용',
+    description: '처음 방문하시는 고객님을 위한 4단계 이용 절차, 복장 안내, 결제 방식, 주차 및 안심 가이드. 10년 경력 매니저진 1:1 케어.',
+  },
+  en: {
+    title: 'How to Use & First-Time Visitor Guide | Easy 4 Steps',
+    description: '4-step guide for first-time visitors to AK Dalto Gangnam. Dress code, payment options, parking support, and personalized manager care.',
+  },
+  zh: {
+    title: '使用指南与首次到访须知 | 简单4步流程',
+    description: 'AK Dalto首次到访4步指南：着装建议、结账方式、代客泊车及10年经验经理1对1专属服务。',
+  },
+  ja: {
+    title: 'ご利用案内・初回ガイド | 4ステップ簡単案内',
+    description: '初めてAK Daltoをご利用されるお客様へ：4ステップご利用手順、ドレスコード、決済方法、駐車場案内。',
+  },
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params
+  const m = howtoMeta[lang] ?? howtoMeta.ko
+
+  return {
+    title: m.title,
+    description: m.description,
+    alternates: {
+      canonical: `${BASE_URL}/${lang}/howto`,
+      languages: {
+        ko: `${BASE_URL}/ko/howto`,
+        en: `${BASE_URL}/en/howto`,
+        'zh-CN': `${BASE_URL}/zh/howto`,
+        ja: `${BASE_URL}/ja/howto`,
+        'x-default': `${BASE_URL}/ko/howto`,
+      },
+    },
+    openGraph: {
+      title: `${m.title} | 강남 AK달토`,
+      description: m.description,
+      url: `${BASE_URL}/${lang}/howto`,
+      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto How to Use Guide' }],
+    },
+  }
+}
 
 interface Props {
   params: Promise<{ lang: string }>

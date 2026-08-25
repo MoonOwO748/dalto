@@ -1,7 +1,55 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { hasLocale, getDictionary } from '../dictionaries'
 import { PricingSection } from '@/components/home/PricingSection'
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
+
+const pricingMeta: Record<string, { title: string; description: string }> = {
+  ko: {
+    title: '요금 안내 & 실시간 견적 계산기 | 투명 정찰제',
+    description: '강남 AK 달토의 투명한 주대 및 타임비(TC), 룸비(RT) 정찰제 요금표. 9시 이전 5만원 할인 혜택 및 실시간 견적 계산기.',
+  },
+  en: {
+    title: 'Pricing & Cost Calculator | Transparent Rates',
+    description: 'AK Dalto Gangnam transparent pricing guide. Fixed whiskey table ₩150,000, ₩50,000 off before 9PM. TC and RT details included.',
+  },
+  zh: {
+    title: '价格指南与费用估算 | 透明定额消费',
+    description: '首尔江南AK Dalto透明定额价格表。基本酒水费15万韩元，21点前到访享5万韩元优惠。',
+  },
+  ja: {
+    title: '料金案内・見積りシミュレーター | 透明定額制',
+    description: '江南AK Daltoの透明定額料金表。基本飲み代15万ウォン、21時前のご来店で5万ウォン割引。',
+  },
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params
+  const m = pricingMeta[lang] ?? pricingMeta.ko
+
+  return {
+    title: m.title,
+    description: m.description,
+    alternates: {
+      canonical: `${BASE_URL}/${lang}/pricing`,
+      languages: {
+        ko: `${BASE_URL}/ko/pricing`,
+        en: `${BASE_URL}/en/pricing`,
+        'zh-CN': `${BASE_URL}/zh/pricing`,
+        ja: `${BASE_URL}/ja/pricing`,
+        'x-default': `${BASE_URL}/ko/pricing`,
+      },
+    },
+    openGraph: {
+      title: `${m.title} | 강남 AK달토`,
+      description: m.description,
+      url: `${BASE_URL}/${lang}/pricing`,
+      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Pricing' }],
+    },
+  }
+}
 
 interface Props {
   params: Promise<{ lang: string }>

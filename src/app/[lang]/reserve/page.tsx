@@ -1,6 +1,54 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { hasLocale, getDictionary } from '../dictionaries'
 import Link from 'next/link'
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
+
+const reserveMeta: Record<string, { title: string; description: string }> = {
+  ko: {
+    title: '온라인 예약 & 전화 문의 | 24시간 실시간 룸 예약',
+    description: '강남 AK 달토 실시간 예약 및 사전 상담. 전화 010-5704-3097 또는 간편 온라인 예약. 365일 연중무휴.',
+  },
+  en: {
+    title: 'Online Reservation & Phone Inquiry | 24/7 Room Booking',
+    description: 'AK Dalto Gangnam 24/7 room booking. Call +82-10-5704-3097 or book online. Open 365 days.',
+  },
+  zh: {
+    title: '在线预订与电话咨询 | 24小时实时包厢预订',
+    description: '首尔江南AK Dalto在线预订与咨询。致电+82-10-5704-3097或在线提交预订。全年365天营业。',
+  },
+  ja: {
+    title: 'オンライン予約・電話問い合わせ | 24時間ルーム予約',
+    description: '江南AK Daltoリアルタイム予約・事前相談。お電話 +82-10-5704-3097 または簡単Web予約。年中無休。',
+  },
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params
+  const m = reserveMeta[lang] ?? reserveMeta.ko
+
+  return {
+    title: m.title,
+    description: m.description,
+    alternates: {
+      canonical: `${BASE_URL}/${lang}/reserve`,
+      languages: {
+        ko: `${BASE_URL}/ko/reserve`,
+        en: `${BASE_URL}/en/reserve`,
+        'zh-CN': `${BASE_URL}/zh/reserve`,
+        ja: `${BASE_URL}/ja/reserve`,
+        'x-default': `${BASE_URL}/ko/reserve`,
+      },
+    },
+    openGraph: {
+      title: `${m.title} | 강남 AK달토`,
+      description: m.description,
+      url: `${BASE_URL}/${lang}/reserve`,
+      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Reservation' }],
+    },
+  }
+}
 
 interface Props {
   params: Promise<{ lang: string }>

@@ -30,10 +30,10 @@ export function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Redirect root to default locale
+  // Redirect root to default locale with 308 permanent redirect for SEO rank transfer
   const locale = getLocale(request)
   const newUrl = new URL(`/${locale}${pathname === '/' ? '' : pathname}`, request.url)
-  return NextResponse.redirect(newUrl)
+  return NextResponse.redirect(newUrl, 308)
 }
 
 export const config = {

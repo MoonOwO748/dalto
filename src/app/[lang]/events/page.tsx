@@ -1,6 +1,54 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { hasLocale, getDictionary } from '../dictionaries'
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
+
+const eventsMeta: Record<string, { title: string; description: string }> = {
+  ko: {
+    title: '이벤트 & 프로모션 혜택 | 얼리버드 5만 할인',
+    description: 'AK 달토 상시 이벤트: 오후 9시 이전 얼리버드 5만원 즉시 할인, 단체 회식 맞춤 패키지, 비즈니스 VIP 접대 프로그램 안내.',
+  },
+  en: {
+    title: 'Events & Special Promotions | Early Bird Deals',
+    description: 'AK Dalto Gangnam special offers: ₩50,000 Early Bird discount before 9PM, group party packages, and VIP business hosting programs.',
+  },
+  zh: {
+    title: '活动与特别优惠 | 21点前到访立减5万',
+    description: '首尔江南AK Dalto特别优惠：21点前入场立减5万韩元，团体聚餐定制套餐，商务VIP接待专属服务。',
+  },
+  ja: {
+    title: 'イベント・特典案内 | 21時前5万ウォン割引',
+    description: '江南AK Dalto特別割引：21時前のご来店で5万ウォン即時割引、団体様向けパッケージ、VIP接待プログラム。',
+  },
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params
+  const m = eventsMeta[lang] ?? eventsMeta.ko
+
+  return {
+    title: m.title,
+    description: m.description,
+    alternates: {
+      canonical: `${BASE_URL}/${lang}/events`,
+      languages: {
+        ko: `${BASE_URL}/ko/events`,
+        en: `${BASE_URL}/en/events`,
+        'zh-CN': `${BASE_URL}/zh/events`,
+        ja: `${BASE_URL}/ja/events`,
+        'x-default': `${BASE_URL}/ko/events`,
+      },
+    },
+    openGraph: {
+      title: `${m.title} | 강남 AK달토`,
+      description: m.description,
+      url: `${BASE_URL}/${lang}/events`,
+      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Events' }],
+    },
+  }
+}
 
 interface Props {
   params: Promise<{ lang: string }>

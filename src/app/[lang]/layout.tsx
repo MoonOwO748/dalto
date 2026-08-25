@@ -21,23 +21,23 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
 
 const metaByLocale: Record<string, { title: string; description: string; ogLocale: string }> = {
   ko: {
-    title: '☎ 010-5704-3097 | 강남 AK달토 공식 | 기본 주대 15만 · 9시전 5만 할인',
-    description: '서울 강남구 역삼동 프라이빗 룸 가라오케 AK 달토. 기본 주대 15만원, 오후 9시 이전 방문 시 5만원 할인. 신논현역 4번 출구 도보 3분. 365일 연중무휴. 전화 010-5704-3097.',
+    title: '강남 AK달토 공식 | 역삼동 프라이빗 룸 가라오케 · 기본 주대 15만 투명 정찰제',
+    description: '서울 강남구 역삼동 삼정호텔 위치 AK 달토(구 유앤미 리뉴얼). 기본 주대 15만원, 오후 9시 이전 5만원 할인. 신논현역 4번 출구 도보 3분. 365일 연중무휴. 문의 010-5704-3097.',
     ogLocale: 'ko_KR',
   },
   en: {
-    title: 'AK Dalto Gangnam Karaoke | From ₩150,000 · Early Bird Discount',
-    description: 'Premium private karaoke in Yeoksam-dong, Gangnam. Fixed price ₩150,000, ₩50,000 off before 9PM. 3-5 min walk from Sinnonhyeon Station. Open 365 days. Call 010-5704-3097.',
+    title: 'AK Dalto Gangnam Karaoke | Premium Private Lounge & Transparent Pricing',
+    description: 'Premium private karaoke in Yeoksam-dong, Gangnam (formerly UNME). Fixed price ₩150,000, ₩50,000 off before 9PM. 3-5 min walk from Sinnonhyeon Station. Open 365 days. Call 010-5704-3097.',
     ogLocale: 'en_US',
   },
   zh: {
-    title: 'AK Dalto 江南KTV官方 | 酒水费15万起 · 21点前到访享折扣',
-    description: '首尔江南区驿三洞私人包厢KTV。基本酒水费15万韩元，21点前到访享5万韩元优惠。新论岘站4号出口步行3-5分钟。全年365天营业。',
+    title: 'AK Dalto 江南KTV官方 | 首尔江南私人包厢 · 透明平价消费',
+    description: '首尔江南区驿三洞三井酒店AK Dalto。基本酒水费15万韩元，21点前到访享5万韩元优惠。新论岘站4号出口步行3-5分钟。全年365天营业。',
     ogLocale: 'zh_CN',
   },
   ja: {
-    title: 'AK Dalto 江南カラオケ公式 | 飲み代15万ウォン · 21時前割引',
-    description: 'ソウル江南区駅三洞のプライベートルームカラオケ。基本飲み代15万ウォン、21時前ご来店で5万ウォン割引。新論峴駅4番出口徒歩3〜5分。年中無休。',
+    title: 'AK Dalto 江南カラオケ公式 | 駅三洞プライベートルーム · 透明定額制',
+    description: 'ソウル江南区駅三洞サムジョンホテルAK Dalto。基本飲み代15万ウォン、21時前ご来店で5万ウォン割引。新論峴駅4番出口徒歩3〜5分。年中無休。',
     ogLocale: 'ja_JP',
   },
 }
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: Omit<LayoutProps, 'children'>
   const m = metaByLocale[lang] ?? metaByLocale.ko
 
   return {
-    title: { default: m.title, template: `%s | AK 달토` },
+    title: { default: m.title, template: `%s | 강남 AK달토` },
     description: m.description,
     alternates: {
       canonical: `${BASE_URL}/${lang}`,
@@ -95,18 +95,30 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
         '@id': `${BASE_URL}/#website`,
         url: BASE_URL,
         name: 'AK Dalto',
+        alternateName: ['AK 달토', '강남 달토', '강남 유앤미', 'AK 유앤미'],
         inLanguage: ['ko', 'en', 'zh-CN', 'ja'],
       },
       {
         '@type': 'NightClub',
         '@id': `${BASE_URL}/#business`,
         name: 'AK 달토',
-        alternateName: ['AK Dalto', 'AK달토', 'Gangnam Karaoke', '江南KTV', '江南カラオケ'],
+        alternateName: [
+          'AK Dalto',
+          'AK달토',
+          '강남 달토',
+          '강남 달토 가라오케',
+          '강남 유앤미',
+          'AK 유앤미',
+          'AK UNME',
+          'Gangnam Karaoke',
+          '江南KTV',
+          '江南カラオケ',
+        ],
         url: BASE_URL,
         telephone: '+82-10-5704-3097',
         address: {
           '@type': 'PostalAddress',
-          streetAddress: '역삼동 604-11',
+          streetAddress: '역삼동 604-11 삼정호텔',
           addressLocality: '강남구',
           addressRegion: '서울',
           postalCode: '06234',

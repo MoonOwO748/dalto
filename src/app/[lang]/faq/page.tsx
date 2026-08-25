@@ -1,7 +1,55 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { hasLocale, getDictionary } from '../dictionaries'
 import { FaqSection } from '@/components/home/FaqSection'
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
+
+const faqMeta: Record<string, { title: string; description: string }> = {
+  ko: {
+    title: '자주 묻는 질문 (FAQ) | 예약·주대·위치 궁금증 안내',
+    description: 'AK 달토 자주 묻는 질문: 예약 방법, 기본 주대 15만원 및 얼리버드 할인, 영업시간, 신논현역 삼정호텔 위치, 외국인 응대 안내.',
+  },
+  en: {
+    title: 'Frequently Asked Questions (FAQ) | Booking & Rates Guide',
+    description: 'AK Dalto Gangnam FAQ: Reservation methods, pricing rules, early bird discounts, opening hours, and foreign guest support.',
+  },
+  zh: {
+    title: '常见问题解答 (FAQ) | 预订·酒水费·位置指南',
+    description: 'AK Dalto常见问题解答：如何预订、基本酒水费15万优惠规则、营业时间、新论岘站位置及外语服务。',
+  },
+  ja: {
+    title: 'よくあるご質問 (FAQ) | ご予約・料金・アクセス案内',
+    description: 'AK Daltoよくある質問：予約手順、基本飲み代15万ウォン割引制度、営業時間、新論峴駅アクセス、外国人対応。',
+  },
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params
+  const m = faqMeta[lang] ?? faqMeta.ko
+
+  return {
+    title: m.title,
+    description: m.description,
+    alternates: {
+      canonical: `${BASE_URL}/${lang}/faq`,
+      languages: {
+        ko: `${BASE_URL}/ko/faq`,
+        en: `${BASE_URL}/en/faq`,
+        'zh-CN': `${BASE_URL}/zh/faq`,
+        ja: `${BASE_URL}/ja/faq`,
+        'x-default': `${BASE_URL}/ko/faq`,
+      },
+    },
+    openGraph: {
+      title: `${m.title} | 강남 AK달토`,
+      description: m.description,
+      url: `${BASE_URL}/${lang}/faq`,
+      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto FAQ' }],
+    },
+  }
+}
 
 interface Props {
   params: Promise<{ lang: string }>
@@ -13,8 +61,25 @@ export default async function FaqPage({ params }: Props) {
 
   const dict = await getDictionary(lang)
 
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: dict.faq.items.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    })),
+  }
+
   return (
     <main className="mx-auto w-full max-w-[1440px] px-4 py-10 sm:px-8 md:px-12 lg:px-16 md:py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }}
+      />
       {/* Page Header Hero */}
       <section className="glass-card relative overflow-hidden rounded-3xl p-8 md:p-14">
         <div
