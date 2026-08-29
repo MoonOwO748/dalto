@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { locales, hasLocale, getDictionary } from '../../dictionaries'
+import { getHrefLangAlternates, getLocalizedUrl, getLocalizedPath, BASE_URL } from '@/lib/routes'
 import { getBlogPosts, getBlogPostBySlug } from '@/lib/wordpress'
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
 
 interface Props {
   params: Promise<{ lang: string; slug: string }>
@@ -27,21 +26,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getBlogPostBySlug(slug)
   if (!post) return {}
 
-  const canonicalUrl = `${BASE_URL}/${lang}/blog/${slug}`
+  const canonicalUrl = getLocalizedUrl(`/blog/${slug}`, lang, BASE_URL)
 
   return {
     title: `${post.title} | AK 달토 블로그`,
     description: post.excerpt,
-    alternates: {
-      canonical: canonicalUrl,
-      languages: {
-        ko: `${BASE_URL}/ko/blog/${slug}`,
-        en: `${BASE_URL}/en/blog/${slug}`,
-        'zh-CN': `${BASE_URL}/zh/blog/${slug}`,
-        ja: `${BASE_URL}/ja/blog/${slug}`,
-        'x-default': `${BASE_URL}/ko/blog/${slug}`,
-      },
-    },
+    alternates: getHrefLangAlternates(`/blog/${slug}`, lang, BASE_URL),
     openGraph: {
       title: `${post.title} | 강남 AK달토`,
       description: post.excerpt,
@@ -75,6 +65,8 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await getBlogPostBySlug(slug)
   if (!post) notFound()
 
+  const postUrl = getLocalizedUrl(`/blog/${slug}`, lang, BASE_URL)
+
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -85,25 +77,25 @@ export default async function BlogPostPage({ params }: Props) {
             '@type': 'ListItem',
             position: 1,
             name: 'Home',
-            item: `${BASE_URL}/${lang}`,
+            item: getLocalizedUrl('/', lang, BASE_URL),
           },
           {
             '@type': 'ListItem',
             position: 2,
             name: 'Blog',
-            item: `${BASE_URL}/${lang}/blog`,
+            item: getLocalizedUrl('/blog', lang, BASE_URL),
           },
           {
             '@type': 'ListItem',
             position: 3,
             name: post.title,
-            item: `${BASE_URL}/${lang}/blog/${slug}`,
+            item: postUrl,
           },
         ],
       },
       {
         '@type': 'Article',
-        '@id': `${BASE_URL}/${lang}/blog/${slug}#article`,
+        '@id': `${postUrl}#article`,
         headline: post.title,
         description: post.excerpt,
         datePublished: post.date,
@@ -123,7 +115,7 @@ export default async function BlogPostPage({ params }: Props) {
         },
         mainEntityOfPage: {
           '@type': 'WebPage',
-          '@id': `${BASE_URL}/${lang}/blog/${slug}`,
+          '@id': postUrl,
         },
       },
     ],
@@ -138,11 +130,11 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* Breadcrumb navigation */}
       <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-xs text-bone-mute">
-        <Link href={`/${lang}`} className="hover:text-accent transition-colors">
+        <Link href={getLocalizedPath('/', lang)} className="hover:text-accent transition-colors">
           홈
         </Link>
         <span>/</span>
-        <Link href={`/${lang}/blog`} className="hover:text-accent transition-colors">
+        <Link href={getLocalizedPath('/blog', lang)} className="hover:text-accent transition-colors">
           블로그
         </Link>
         <span>/</span>
@@ -199,7 +191,7 @@ export default async function BlogPostPage({ params }: Props) {
       {/* Navigation Back */}
       <div className="mt-8 flex justify-between items-center">
         <Link
-          href={`/${lang}/blog`}
+          href={getLocalizedPath('/blog', lang)}
           className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-5 py-2.5 text-xs font-medium text-bone hover:border-accent hover:text-accent transition-colors"
         >
           ← 목록으로 돌아가기
@@ -237,7 +229,7 @@ export default async function BlogPostPage({ params }: Props) {
             010-5704-3097 전화 문의
           </a>
           <Link
-            href={`/${lang}/reserve`}
+            href={getLocalizedPath('/reserve', lang)}
             className="inline-flex items-center justify-center rounded-xl border px-8 py-4 text-sm font-medium transition-all hover:scale-[1.02] hover:border-white/20 hover:bg-white/5 sm:min-w-[180px]"
             style={{ borderColor: 'var(--border)', color: 'var(--bone)' }}
           >

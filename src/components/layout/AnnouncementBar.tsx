@@ -1,4 +1,6 @@
+import Link from 'next/link'
 import type { getDictionary } from '@/app/[lang]/dictionaries'
+import { getLocalizedPath } from '@/lib/routes'
 
 type Dict = Awaited<ReturnType<typeof getDictionary>>
 
@@ -41,8 +43,8 @@ export function AnnouncementBar({ dict, lang }: Props) {
           </div>
         </div>
 
-        <a
-          href={`/${lang}/pricing`}
+        <Link
+          href={getLocalizedPath('/pricing', lang)}
           className="shrink-0 whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-bold transition-colors hover:text-white"
           style={{
             background: 'rgba(12,12,12,0.85)',
@@ -52,7 +54,7 @@ export function AnnouncementBar({ dict, lang }: Props) {
           }}
         >
           {dict.announcement_cta} <span aria-hidden="true">→</span>
-        </a>
+        </Link>
       </div>
     </div>
   )

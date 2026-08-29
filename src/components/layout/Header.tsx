@@ -1,7 +1,9 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import type { getDictionary } from '@/app/[lang]/dictionaries'
+import { getLocalizedPath } from '@/lib/routes'
 
 type Dict = Awaited<ReturnType<typeof getDictionary>>
 
@@ -19,15 +21,22 @@ interface Props {
 
 export function Header({ dict, lang }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const pathname = usePathname() || '/'
+
+  // Extract clean subpath without current language prefix
+  const cleanSubPath = pathname.replace(/^\/(?:en|zh|ja|ko)(?=\/|$)/, '') || '/'
 
   const navLinks = [
-    { href: `/${lang}/pricing`, label: dict.nav.pricing },
-    { href: `/${lang}/events`,  label: dict.nav.events },
-    { href: `/${lang}/howto`,   label: dict.nav.howto },
-    { href: `/${lang}/access`,  label: dict.nav.access },
-    { href: `/${lang}/faq`,     label: dict.nav.faq },
-    { href: `/${lang}/blog`,    label: dict.nav.blog },
+    { href: getLocalizedPath('/pricing', lang), label: dict.nav.pricing },
+    { href: getLocalizedPath('/events', lang),  label: dict.nav.events },
+    { href: getLocalizedPath('/howto', lang),   label: dict.nav.howto },
+    { href: getLocalizedPath('/access', lang),  label: dict.nav.access },
+    { href: getLocalizedPath('/faq', lang),     label: dict.nav.faq },
+    { href: getLocalizedPath('/blog', lang),    label: dict.nav.blog },
   ]
+
+  const homeHref = getLocalizedPath('/', lang)
+  const reserveHref = getLocalizedPath('/reserve', lang)
 
   return (
     <header className="mx-auto w-full max-w-[1440px] px-4 pt-3 sm:px-8 md:px-12 lg:px-16 sm:pt-5">
@@ -41,7 +50,7 @@ export function Header({ dict, lang }: Props) {
       >
         {/* Logo */}
         <Link
-          href={`/${lang}`}
+          href={homeHref}
           aria-label="AK 달토"
           className="group flex shrink-0 items-center gap-2 leading-none"
         >
@@ -77,7 +86,7 @@ export function Header({ dict, lang }: Props) {
             {LOCALES.map((l) => (
               <Link
                 key={l.code}
-                href={`/${l.code}`}
+                href={getLocalizedPath(cleanSubPath, l.code)}
                 hrefLang={l.code}
                 aria-current={l.code === lang ? 'page' : undefined}
                 className="px-1.5 py-2 tracking-widest uppercase transition-colors"
@@ -90,7 +99,7 @@ export function Header({ dict, lang }: Props) {
 
           {/* Reserve button */}
           <Link
-            href={`/${lang}/reserve`}
+            href={reserveHref}
             className="hidden whitespace-nowrap rounded-full px-4 py-2 text-xs font-medium transition-colors hover:brightness-110 sm:inline-block"
             style={{ background: 'var(--accent)', color: 'var(--ink)' }}
           >
@@ -156,7 +165,7 @@ export function Header({ dict, lang }: Props) {
               {LOCALES.map((l) => (
                 <Link
                   key={l.code}
-                  href={`/${l.code}`}
+                  href={getLocalizedPath(cleanSubPath, l.code)}
                   hrefLang={l.code}
                   onClick={() => setMenuOpen(false)}
                   className="text-xs tracking-widest uppercase transition-colors"
@@ -167,7 +176,7 @@ export function Header({ dict, lang }: Props) {
               ))}
             </div>
             <Link
-              href={`/${lang}/reserve`}
+              href={reserveHref}
               onClick={() => setMenuOpen(false)}
               className="mt-3 flex w-full items-center justify-center rounded-full py-3 text-sm font-medium transition-colors hover:brightness-110"
               style={{ background: 'var(--accent)', color: 'var(--ink)' }}

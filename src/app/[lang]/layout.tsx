@@ -7,6 +7,7 @@ interface LayoutProps {
   params: Promise<{ lang: string }>
 }
 import { hasLocale, locales, getDictionary } from './dictionaries'
+import { getHrefLangAlternates, getLocalizedUrl, BASE_URL } from '@/lib/routes'
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -15,9 +16,6 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal'
 const notoKR = Noto_Sans_KR({ subsets: ['latin'], weight: ['300','400','500','600','700'], variable: '--font-noto-kr', display: 'swap' })
 const notoSC = Noto_Sans_SC({ subsets: ['latin'], weight: ['300','400','500','600','700'], variable: '--font-noto-sc', display: 'swap' })
 const notoJP = Noto_Sans_JP({ subsets: ['latin'], weight: ['300','400','500','600','700'], variable: '--font-noto-jp', display: 'swap' })
-
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
 
 const metaByLocale: Record<string, { title: string; description: string; ogLocale: string }> = {
   ko: {
@@ -53,20 +51,11 @@ export async function generateMetadata({ params }: Omit<LayoutProps, 'children'>
   return {
     title: { default: m.title, template: `%s | 강남 AK달토` },
     description: m.description,
-    alternates: {
-      canonical: `${BASE_URL}/${lang}`,
-      languages: {
-        ko: `${BASE_URL}/ko`,
-        en: `${BASE_URL}/en`,
-        'zh-CN': `${BASE_URL}/zh`,
-        ja: `${BASE_URL}/ja`,
-        'x-default': `${BASE_URL}/ko`,
-      },
-    },
+    alternates: getHrefLangAlternates('/', lang, BASE_URL),
     openGraph: {
       title: m.title,
       description: m.description,
-      url: `${BASE_URL}/${lang}`,
+      url: getLocalizedUrl('/', lang, BASE_URL),
       siteName: 'AK 달토',
       locale: m.ogLocale,
       type: 'website',

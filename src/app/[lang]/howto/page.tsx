@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { hasLocale, getDictionary } from '../dictionaries'
+import { getHrefLangAlternates, getLocalizedUrl, getLocalizedPath, BASE_URL } from '@/lib/routes'
 import { GuideSection } from '@/components/home/GuideSection'
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
 
 const howtoMeta: Record<string, { title: string; description: string }> = {
   ko: {
@@ -32,20 +31,11 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: m.title,
     description: m.description,
-    alternates: {
-      canonical: `${BASE_URL}/${lang}/howto`,
-      languages: {
-        ko: `${BASE_URL}/ko/howto`,
-        en: `${BASE_URL}/en/howto`,
-        'zh-CN': `${BASE_URL}/zh/howto`,
-        ja: `${BASE_URL}/ja/howto`,
-        'x-default': `${BASE_URL}/ko/howto`,
-      },
-    },
+    alternates: getHrefLangAlternates('/howto', lang, BASE_URL),
     openGraph: {
       title: `${m.title} | 강남 AK달토`,
       description: m.description,
-      url: `${BASE_URL}/${lang}/howto`,
+      url: getLocalizedUrl('/howto', lang, BASE_URL),
       images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto How to Use Guide' }],
     },
   }
@@ -238,7 +228,7 @@ export default async function HowtoPage({ params }: Props) {
             010-5704-3097
           </a>
           <Link
-            href={`/${lang}/reserve`}
+            href={getLocalizedPath('/reserve', lang)}
             className="inline-flex items-center justify-center rounded-xl border px-8 py-4 text-sm font-medium transition-all hover:scale-[1.02] hover:border-white/20 hover:bg-white/5 sm:min-w-[180px]"
             style={{ borderColor: 'var(--border)', color: 'var(--bone)' }}
           >

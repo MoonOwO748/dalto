@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import type { getDictionary } from '@/app/[lang]/dictionaries'
+import { getLocalizedPath } from '@/lib/routes'
 
 type Dict = Awaited<ReturnType<typeof getDictionary>>
 
@@ -12,12 +13,12 @@ interface Props {
 
 export function Footer({ dict, lang }: Props) {
   const navLinks = [
-    { href: `/${lang}/pricing`, label: dict.nav.pricing },
-    { href: `/${lang}/events`,  label: dict.nav.events },
-    { href: `/${lang}/howto`,   label: dict.nav.howto },
-    { href: `/${lang}/access`,  label: dict.nav.access },
-    { href: `/${lang}/faq`,     label: dict.nav.faq },
-    { href: `/${lang}/blog`,    label: dict.nav.blog },
+    { href: getLocalizedPath('/pricing', lang), label: dict.nav.pricing },
+    { href: getLocalizedPath('/events', lang),  label: dict.nav.events },
+    { href: getLocalizedPath('/howto', lang),   label: dict.nav.howto },
+    { href: getLocalizedPath('/access', lang),  label: dict.nav.access },
+    { href: getLocalizedPath('/faq', lang),     label: dict.nav.faq },
+    { href: getLocalizedPath('/blog', lang),    label: dict.nav.blog },
   ]
 
   const scrollToTop = () => {
@@ -149,7 +150,7 @@ export function Footer({ dict, lang }: Props) {
               </p>
             </div>
             <Link
-              href={`/${lang}/reserve`}
+              href={getLocalizedPath('/reserve', lang)}
               className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-semibold transition-all duration-300 hover:scale-[1.02] hover:brightness-110"
               style={{
                 background: 'linear-gradient(135deg, var(--accent), var(--accent-bright))',

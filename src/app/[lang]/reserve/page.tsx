@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { hasLocale, getDictionary } from '../dictionaries'
+import { getHrefLangAlternates, getLocalizedUrl, getLocalizedPath, BASE_URL } from '@/lib/routes'
 import Link from 'next/link'
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
 
 const reserveMeta: Record<string, { title: string; description: string }> = {
   ko: {
@@ -31,20 +30,11 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: m.title,
     description: m.description,
-    alternates: {
-      canonical: `${BASE_URL}/${lang}/reserve`,
-      languages: {
-        ko: `${BASE_URL}/ko/reserve`,
-        en: `${BASE_URL}/en/reserve`,
-        'zh-CN': `${BASE_URL}/zh/reserve`,
-        ja: `${BASE_URL}/ja/reserve`,
-        'x-default': `${BASE_URL}/ko/reserve`,
-      },
-    },
+    alternates: getHrefLangAlternates('/reserve', lang, BASE_URL),
     openGraph: {
       title: `${m.title} | 강남 AK달토`,
       description: m.description,
-      url: `${BASE_URL}/${lang}/reserve`,
+      url: getLocalizedUrl('/reserve', lang, BASE_URL),
       images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Reservation' }],
     },
   }
@@ -95,7 +85,7 @@ export default async function ReservePage({ params }: Props) {
           </div>
 
           <Link
-            href={`/${lang}`}
+            href={getLocalizedPath('/', lang)}
             className="text-center text-sm transition-colors hover:text-bone"
             style={{ color: 'var(--bone-dim)' }}
           >

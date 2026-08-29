@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { hasLocale, getDictionary } from '../dictionaries'
+import { getHrefLangAlternates, getLocalizedUrl, BASE_URL } from '@/lib/routes'
 import AccessPageClient from './AccessPageClient'
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ak-dalto.com'
 
 const accessMeta: Record<string, { title: string; description: string }> = {
   ko: {
@@ -31,20 +30,11 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: m.title,
     description: m.description,
-    alternates: {
-      canonical: `${BASE_URL}/${lang}/access`,
-      languages: {
-        ko: `${BASE_URL}/ko/access`,
-        en: `${BASE_URL}/en/access`,
-        'zh-CN': `${BASE_URL}/zh/access`,
-        ja: `${BASE_URL}/ja/access`,
-        'x-default': `${BASE_URL}/ko/access`,
-      },
-    },
+    alternates: getHrefLangAlternates('/access', lang, BASE_URL),
     openGraph: {
       title: `${m.title} | 강남 AK달토`,
       description: m.description,
-      url: `${BASE_URL}/${lang}/access`,
+      url: getLocalizedUrl('/access', lang, BASE_URL),
       images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Access Map' }],
     },
   }
