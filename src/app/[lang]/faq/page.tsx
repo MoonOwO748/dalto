@@ -1,3 +1,4 @@
+import { PageSchema } from '@/components/common/PageSchema'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -57,25 +58,9 @@ export default async function FaqPage({ params }: Props) {
 
   const dict = await getDictionary(lang)
 
-  const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: dict.faq.items.map((item) => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.a,
-      },
-    })),
-  }
-
   return (
     <main className="mx-auto w-full max-w-[1440px] px-4 py-10 sm:px-8 md:px-12 lg:px-16 md:py-16">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }}
-      />
+      <PageSchema page="faq" lang={lang} dict={dict} />
       {/* Page Header Hero */}
       <section className="glass-card relative overflow-hidden rounded-3xl p-8 md:p-14">
         <div

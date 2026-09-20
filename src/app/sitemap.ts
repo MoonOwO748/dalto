@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { locales } from '@/app/[lang]/dictionaries'
 import { getLocalizedUrl, BASE_URL } from '@/lib/routes'
-import { getBlogPosts } from '@/lib/wordpress'
+import { getBlogPosts } from '@/lib/blog'
 
 const staticPages = ['', '/pricing', '/events', '/howto', '/access', '/faq', '/blog', '/reserve']
 

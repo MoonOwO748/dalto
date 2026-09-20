@@ -1,3 +1,4 @@
+import { PageSchema } from '@/components/common/PageSchema'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { hasLocale, getDictionary } from '../dictionaries'
@@ -56,5 +57,10 @@ export default async function AccessPage({ params }: Props) {
 
   const dict = await getDictionary(lang)
 
-  return <AccessPageClient dict={dict} lang={lang} />
+  return (
+    <>
+      <PageSchema page="access" lang={lang} dict={dict} />
+      <AccessPageClient dict={dict} lang={lang} />
+    </>
+  )
 }

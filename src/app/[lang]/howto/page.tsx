@@ -1,3 +1,4 @@
+import { PageSchema } from '@/components/common/PageSchema'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -104,6 +105,7 @@ export default async function HowtoPage({ params }: Props) {
 
   return (
     <main className="mx-auto w-full max-w-[1440px] px-4 py-10 sm:px-8 md:px-12 lg:px-16 md:py-16">
+      <PageSchema page="howto" lang={lang} dict={dict} />
       {/* Page Header Hero */}
       <section className="glass-card relative overflow-hidden rounded-3xl p-8 md:p-14">
         <div

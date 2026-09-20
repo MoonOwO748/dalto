@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { locales, hasLocale, getDictionary } from '../../dictionaries'
 import { getHrefLangAlternates, getLocalizedUrl, getLocalizedPath, BASE_URL } from '@/lib/routes'
-import { getBlogPosts, getBlogPostBySlug } from '@/lib/wordpress'
+import { getBlogPosts, getBlogPostBySlug } from '@/lib/blog'
 
 interface Props {
   params: Promise<{ lang: string; slug: string }>
@@ -98,6 +98,8 @@ export default async function BlogPostPage({ params }: Props) {
         '@id': `${postUrl}#article`,
         headline: post.title,
         description: post.excerpt,
+        image: post.images?.map((image) => new URL(image.src, BASE_URL).href)
+          ?? (post.featuredImage ? [new URL(post.featuredImage, BASE_URL).href] : undefined),
         datePublished: post.date,
         dateModified: post.date,
         author: {
@@ -183,7 +185,7 @@ export default async function BlogPostPage({ params }: Props) {
       {/* Article Body */}
       <article className="glass-card mt-8 rounded-3xl p-8 md:p-12 leading-relaxed text-bone-dim">
         <div
-          className="prose prose-invert max-w-none space-y-6 text-sm md:text-base [&>h3]:text-xl [&>h3]:font-bold [&>h3]:text-bone [&>h3]:mt-8 [&>h3]:mb-3 [&>p]:leading-relaxed [&>p]:text-bone-dim [&>strong]:text-bone"
+          className="prose prose-invert max-w-none space-y-6 text-sm md:text-base [&>h2]:mt-8 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-bone [&>h3]:text-xl [&>h3]:font-bold [&>h3]:text-bone [&>h3]:mt-8 [&>h3]:mb-3 [&>p]:leading-relaxed [&>p]:text-bone-dim [&>strong]:text-bone [&_img]:h-auto [&_img]:w-full [&_img]:rounded-2xl [&_figcaption]:mt-3 [&_figcaption]:text-center [&_figcaption]:text-xs [&_a]:text-accent [&_a]:underline"
           dangerouslySetInnerHTML={{ __html: post.content || `<p>${post.excerpt}</p>` }}
         />
       </article>

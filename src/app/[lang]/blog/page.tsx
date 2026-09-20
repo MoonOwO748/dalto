@@ -1,9 +1,10 @@
+import { PageSchema } from '@/components/common/PageSchema'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { hasLocale, getDictionary } from '../dictionaries'
 import { getHrefLangAlternates, getLocalizedUrl, getLocalizedPath, BASE_URL } from '@/lib/routes'
-import { getBlogPosts } from '@/lib/wordpress'
+import { getBlogPosts } from '@/lib/blog'
 
 const blogMeta: Record<string, { title: string; description: string }> = {
   ko: {
@@ -60,6 +61,7 @@ export default async function BlogPage({ params }: Props) {
 
   return (
     <main className="mx-auto w-full max-w-[1440px] px-4 py-10 sm:px-8 md:px-12 lg:px-16 md:py-16">
+      <PageSchema page="blog" lang={lang} dict={dict} posts={posts} />
       {/* Page Header Hero */}
       <section className="glass-card relative overflow-hidden rounded-3xl p-8 md:p-14">
         <div

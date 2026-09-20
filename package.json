@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "validate:blog": "node scripts/validate-blog.mjs",
+    "test:blog": "node --test scripts/validate-blog.test.mjs",
+    "prebuild": "npm run validate:blog"
   },
   "dependencies": {
     "graphql": "^16.14.2",
