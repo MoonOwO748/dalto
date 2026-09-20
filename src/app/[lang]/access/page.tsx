@@ -7,7 +7,7 @@ import AccessPageClient from './AccessPageClient'
 const accessMeta: Record<string, { title: string; description: string }> = {
   ko: {
     title: '오시는 길 & 위치 안내 | 신논현역·강남역 삼정호텔',
-    description: '서울 강남구 역삼동 604-11 삼정호텔 위치. 신논현역 4번 출구 도보 3분, 강남역 11번 출구 도보 8분. 무료 발렛 파킹 및 주차 지원.',
+    description: '강남 달토 위치 및 오시는 길. 서울 강남구 역삼동 604-11 삼정호텔, 신논현역 4번 출구 도보 3~5분. 주차와 방문 경로를 확인하세요.',
   },
   en: {
     title: 'Location & Access Map | Sinnonhyeon & Gangnam Station',
@@ -31,8 +31,14 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     title: m.title,
     description: m.description,
     alternates: getHrefLangAlternates('/access', lang, BASE_URL),
+    twitter: {
+      card: 'summary_large_image',
+      title: `${m.title} | 강남 달토`,
+      description: m.description,
+      images: [`${BASE_URL}/og/default.jpg`],
+    },
     openGraph: {
-      title: `${m.title} | 강남 AK달토`,
+      title: `${m.title} | 강남 달토`,
       description: m.description,
       url: getLocalizedUrl('/access', lang, BASE_URL),
       images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Access Map' }],

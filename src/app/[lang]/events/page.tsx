@@ -7,7 +7,7 @@ import { getHrefLangAlternates, getLocalizedUrl, getLocalizedPath, BASE_URL } fr
 const eventsMeta: Record<string, { title: string; description: string }> = {
   ko: {
     title: '이벤트 & 프로모션 혜택 | 얼리버드 5만 할인',
-    description: 'AK 달토 상시 이벤트: 오후 9시 이전 얼리버드 5만원 즉시 할인, 단체 회식 맞춤 패키지, 비즈니스 VIP 접대 프로그램 안내.',
+    description: '강남 달토 이벤트 안내. 오후 9시 이전 기본 주대 5만원 할인, 단체 회식 맞춤 패키지와 비즈니스 VIP 접대 프로그램을 확인하세요.',
   },
   en: {
     title: 'Events & Special Promotions | Early Bird Deals',
@@ -31,8 +31,14 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     title: m.title,
     description: m.description,
     alternates: getHrefLangAlternates('/events', lang, BASE_URL),
+    twitter: {
+      card: 'summary_large_image',
+      title: `${m.title} | 강남 달토`,
+      description: m.description,
+      images: [`${BASE_URL}/og/default.jpg`],
+    },
     openGraph: {
-      title: `${m.title} | 강남 AK달토`,
+      title: `${m.title} | 강남 달토`,
       description: m.description,
       url: getLocalizedUrl('/events', lang, BASE_URL),
       images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Events' }],

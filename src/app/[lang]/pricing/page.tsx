@@ -8,7 +8,7 @@ import { PricingSection } from '@/components/home/PricingSection'
 const pricingMeta: Record<string, { title: string; description: string }> = {
   ko: {
     title: '요금 안내 & 실시간 견적 계산기 | 투명 정찰제',
-    description: '강남 AK 달토의 투명한 주대 및 타임비(TC), 룸비(RT) 정찰제 요금표. 9시 이전 5만원 할인 혜택 및 실시간 견적 계산기.',
+    description: '강남 달토의 주대, 타임비(TC), 룸비(RT) 요금 안내. 기본 주대 15만원, 오후 9시 이전 5만원 할인 혜택과 실시간 견적 계산기를 확인하세요.',
   },
   en: {
     title: 'Pricing & Cost Calculator | Transparent Rates',
@@ -32,8 +32,14 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     title: m.title,
     description: m.description,
     alternates: getHrefLangAlternates('/pricing', lang, BASE_URL),
+    twitter: {
+      card: 'summary_large_image',
+      title: `${m.title} | 강남 달토`,
+      description: m.description,
+      images: [`${BASE_URL}/og/default.jpg`],
+    },
     openGraph: {
-      title: `${m.title} | 강남 AK달토`,
+      title: `${m.title} | 강남 달토`,
       description: m.description,
       url: getLocalizedUrl('/pricing', lang, BASE_URL),
       images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Pricing' }],

@@ -29,11 +29,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonicalUrl = getLocalizedUrl(`/blog/${slug}`, lang, BASE_URL)
 
   return {
-    title: `${post.title} | AK 달토 블로그`,
+    title: post.title,
     description: post.excerpt,
     alternates: getHrefLangAlternates(`/blog/${slug}`, lang, BASE_URL),
     openGraph: {
-      title: `${post.title} | 강남 AK달토`,
+      title: `${post.title} | 강남 달토`,
       description: post.excerpt,
       url: canonicalUrl,
       type: 'article',
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: post.title,
+      title: `${post.title} | 강남 달토`,
       description: post.excerpt,
       images: [post.featuredImage || `${BASE_URL}/og/default.jpg`],
     },
@@ -107,7 +107,7 @@ export default async function BlogPostPage({ params }: Props) {
         },
         publisher: {
           '@type': 'Organization',
-          name: 'AK 달토',
+          name: '강남 달토',
           logo: {
             '@type': 'ImageObject',
             url: `${BASE_URL}/icon.png`,

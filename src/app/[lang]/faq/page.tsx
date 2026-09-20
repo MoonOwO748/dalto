@@ -8,7 +8,7 @@ import { FaqSection } from '@/components/home/FaqSection'
 const faqMeta: Record<string, { title: string; description: string }> = {
   ko: {
     title: '자주 묻는 질문 (FAQ) | 예약·주대·위치 궁금증 안내',
-    description: 'AK 달토 자주 묻는 질문: 예약 방법, 기본 주대 15만원 및 얼리버드 할인, 영업시간, 신논현역 삼정호텔 위치, 외국인 응대 안내.',
+    description: '강남 달토 자주 묻는 질문. 예약 방법, 기본 주대 15만원 및 얼리버드 할인, 영업시간, 위치와 외국인 응대 정보를 안내합니다.',
   },
   en: {
     title: 'Frequently Asked Questions (FAQ) | Booking & Rates Guide',
@@ -32,8 +32,14 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     title: m.title,
     description: m.description,
     alternates: getHrefLangAlternates('/faq', lang, BASE_URL),
+    twitter: {
+      card: 'summary_large_image',
+      title: `${m.title} | 강남 달토`,
+      description: m.description,
+      images: [`${BASE_URL}/og/default.jpg`],
+    },
     openGraph: {
-      title: `${m.title} | 강남 AK달토`,
+      title: `${m.title} | 강남 달토`,
       description: m.description,
       url: getLocalizedUrl('/faq', lang, BASE_URL),
       images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto FAQ' }],

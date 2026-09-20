@@ -8,7 +8,7 @@ import { getBlogPosts } from '@/lib/wordpress'
 const blogMeta: Record<string, { title: string; description: string }> = {
   ko: {
     title: '공식 블로그 & 가라오케 소식 | 이용 팁 및 주대 정보',
-    description: '강남 가라오케 주대 정보부터 얼리버드 할인 혜택, 비즈니스 VIP 접대 팁, 단체 회식 장소 추천까지 AK 달토 공식 소식.',
+    description: '강남 달토 블로그와 소식. 가라오케 주대와 이용 방법, 얼리버드 할인, 단체 회식 및 예약에 필요한 정보를 확인하세요.',
   },
   en: {
     title: 'Official Blog & News | Gangnam Karaoke Tips & Guides',
@@ -32,8 +32,14 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     title: m.title,
     description: m.description,
     alternates: getHrefLangAlternates('/blog', lang, BASE_URL),
+    twitter: {
+      card: 'summary_large_image',
+      title: `${m.title} | 강남 달토`,
+      description: m.description,
+      images: [`${BASE_URL}/og/default.jpg`],
+    },
     openGraph: {
-      title: `${m.title} | 강남 AK달토`,
+      title: `${m.title} | 강남 달토`,
       description: m.description,
       url: getLocalizedUrl('/blog', lang, BASE_URL),
       images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Blog' }],
@@ -71,7 +77,7 @@ export default async function BlogPage({ params }: Props) {
           </div>
 
           <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl md:text-5xl lg:text-6xl" style={{ color: 'var(--bone)' }}>
-            AK 달토 소식 & 블로그
+            강남 달토 소식 & 블로그
           </h1>
 
           <p className="mt-4 text-sm leading-relaxed md:text-base" style={{ color: 'var(--bone-dim)' }}>

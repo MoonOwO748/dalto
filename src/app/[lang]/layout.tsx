@@ -19,8 +19,8 @@ const notoJP = Noto_Sans_JP({ subsets: ['latin'], weight: ['300','400','500','60
 
 const metaByLocale: Record<string, { title: string; description: string; ogLocale: string }> = {
   ko: {
-    title: '강남 AK달토 공식 | 역삼동 프라이빗 룸 가라오케 · 기본 주대 15만 투명 정찰제',
-    description: '서울 강남구 역삼동 삼정호텔 위치 AK 달토(구 유앤미 리뉴얼). 기본 주대 15만원, 오후 9시 이전 5만원 할인. 신논현역 4번 출구 도보 3분. 365일 연중무휴. 문의 010-5704-3097.',
+    title: '강남 달토 | 역삼동 가라오케 주대·위치·예약 안내',
+    description: '강남 달토(AK 달토)의 주대, 위치, 예약 안내. 서울 강남구 역삼동 삼정호텔 위치. 기본 주대 15만원, 오후 9시 이전 5만원 할인. 신논현역 4번 출구 도보 3분. 365일 연중무휴. 문의 010-5704-3097.',
     ogLocale: 'ko_KR',
   },
   en: {
@@ -49,17 +49,17 @@ export async function generateMetadata({ params }: Omit<LayoutProps, 'children'>
   const m = metaByLocale[lang] ?? metaByLocale.ko
 
   return {
-    title: { default: m.title, template: `%s | 강남 AK달토` },
+    title: { default: m.title, template: `%s | 강남 달토` },
     description: m.description,
     alternates: getHrefLangAlternates('/', lang, BASE_URL),
     openGraph: {
       title: m.title,
       description: m.description,
       url: getLocalizedUrl('/', lang, BASE_URL),
-      siteName: 'AK 달토',
+      siteName: '강남 달토',
       locale: m.ogLocale,
       type: 'website',
-      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Gangnam Karaoke' }],
+      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: '강남 달토 가라오케 | AK Dalto Gangnam' }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -83,18 +83,18 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
         '@type': 'WebSite',
         '@id': `${BASE_URL}/#website`,
         url: BASE_URL,
-        name: 'AK Dalto',
-        alternateName: ['AK 달토', '강남 달토', '강남 유앤미', 'AK 유앤미'],
+        name: '강남 달토',
+        alternateName: ['AK 달토', 'AK Dalto', '강남 유앤미', 'AK 유앤미'],
         inLanguage: ['ko', 'en', 'zh-CN', 'ja'],
       },
       {
         '@type': 'NightClub',
         '@id': `${BASE_URL}/#business`,
-        name: 'AK 달토',
+        name: '강남 달토',
         alternateName: [
           'AK Dalto',
           'AK달토',
-          '강남 달토',
+          'AK 달토',
           '강남 달토 가라오케',
           '강남 유앤미',
           'AK 유앤미',

@@ -19,7 +19,7 @@ export function HeroSection({ dict, lang }: Props) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/hero.jpg"
-          alt="AK 달토 프리미엄 라운지"
+          alt={lang === 'ko' ? '강남 달토 프라이빗 룸 가라오케 라운지' : h.title}
           className="pointer-events-none absolute inset-0 h-full w-full object-cover object-top"
         />
 

@@ -7,7 +7,7 @@ import Link from 'next/link'
 const reserveMeta: Record<string, { title: string; description: string }> = {
   ko: {
     title: '온라인 예약 & 전화 문의 | 24시간 실시간 룸 예약',
-    description: '강남 AK 달토 실시간 예약 및 사전 상담. 전화 010-5704-3097 또는 간편 온라인 예약. 365일 연중무휴.',
+    description: '강남 달토 예약 및 사전 상담 안내. 전화 010-5704-3097 또는 온라인으로 방문 날짜, 인원, 룸을 문의하세요. 365일 연중무휴.',
   },
   en: {
     title: 'Online Reservation & Phone Inquiry | 24/7 Room Booking',
@@ -31,8 +31,14 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     title: m.title,
     description: m.description,
     alternates: getHrefLangAlternates('/reserve', lang, BASE_URL),
+    twitter: {
+      card: 'summary_large_image',
+      title: `${m.title} | 강남 달토`,
+      description: m.description,
+      images: [`${BASE_URL}/og/default.jpg`],
+    },
     openGraph: {
-      title: `${m.title} | 강남 AK달토`,
+      title: `${m.title} | 강남 달토`,
       description: m.description,
       url: getLocalizedUrl('/reserve', lang, BASE_URL),
       images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Reservation' }],

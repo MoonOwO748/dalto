@@ -8,7 +8,7 @@ import { GuideSection } from '@/components/home/GuideSection'
 const howtoMeta: Record<string, { title: string; description: string }> = {
   ko: {
     title: '이용 방법 & 첫 방문 가이드 | 4단계 안심 이용',
-    description: '처음 방문하시는 고객님을 위한 4단계 이용 절차, 복장 안내, 결제 방식, 주차 및 안심 가이드. 10년 경력 매니저진 1:1 케어.',
+    description: '강남 달토 첫 방문을 위한 이용 방법. 예약부터 룸 안내, 요금 정산까지 4단계 절차와 복장, 결제, 주차 정보를 확인하세요.',
   },
   en: {
     title: 'How to Use & First-Time Visitor Guide | Easy 4 Steps',
@@ -32,8 +32,14 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     title: m.title,
     description: m.description,
     alternates: getHrefLangAlternates('/howto', lang, BASE_URL),
+    twitter: {
+      card: 'summary_large_image',
+      title: `${m.title} | 강남 달토`,
+      description: m.description,
+      images: [`${BASE_URL}/og/default.jpg`],
+    },
     openGraph: {
-      title: `${m.title} | 강남 AK달토`,
+      title: `${m.title} | 강남 달토`,
       description: m.description,
       url: getLocalizedUrl('/howto', lang, BASE_URL),
       images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto How to Use Guide' }],
