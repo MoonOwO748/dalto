@@ -1,5 +1,3 @@
-'use client'
-import { useState } from 'react'
 import type { getDictionary } from '@/app/[lang]/dictionaries'
 
 type Dict = Awaited<ReturnType<typeof getDictionary>>
@@ -8,7 +6,6 @@ interface Props { dict: Dict }
 
 export function FaqSection({ dict }: Props) {
   const f = dict.faq
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
     <section className="scroll-reveal px-4 pt-16 sm:px-8 md:px-12 lg:px-16 md:pt-28 lg:pt-32">
@@ -27,28 +24,19 @@ export function FaqSection({ dict }: Props) {
       {/* FAQ items — card-based instead of divider-based */}
       <div className="mt-10 flex flex-col gap-3">
         {f.items.map((item, i) => (
-          <div
+          <details
             key={i}
-            className="rounded-xl border transition-all duration-300"
-            style={{
-              borderColor: openIndex === i ? 'rgba(212,149,106,0.2)' : 'var(--border)',
-              background: openIndex === i ? 'rgba(212,149,106,0.03)' : 'var(--surface)',
-            }}
+            className="group rounded-xl border border-[var(--border)] bg-[var(--surface)] transition-all duration-300 open:border-[rgba(212,149,106,0.2)] open:bg-[rgba(212,149,106,0.03)]"
           >
-            <button
-              type="button"
+            <summary
               id={`faq-btn-${i}`}
-              aria-expanded={openIndex === i}
-              aria-controls={`faq-answer-${i}`}
-              onClick={() => setOpenIndex(openIndex === i ? null : i)}
-              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-medium transition-colors md:px-6 md:py-5 md:text-base"
-              style={{ color: openIndex === i ? 'var(--bone)' : 'var(--bone-dim)' }}
+              className="flex w-full cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-left text-sm font-medium text-bone-dim transition-colors group-open:text-bone md:px-6 md:py-5 md:text-base [&::-webkit-details-marker]:hidden"
             >
               <span className="flex items-center gap-3">
                 <span
                   className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[10px] font-bold"
                   style={{
-                    background: openIndex === i ? 'rgba(212,149,106,0.15)' : 'rgba(255,255,255,0.05)',
+                    background: 'rgba(255,255,255,0.05)',
                     color: 'var(--accent)',
                   }}
                 >
@@ -66,24 +54,22 @@ export function FaqSection({ dict }: Props) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 aria-hidden="true"
-                className="shrink-0 transition-transform duration-300"
-                style={{ transform: openIndex === i ? 'rotate(180deg)' : 'none', color: 'var(--accent)' }}
+                className="shrink-0 transition-transform duration-300 group-open:rotate-180"
+                style={{ color: 'var(--accent)' }}
               >
                 <polyline points="6 9 12 15 18 9" />
               </svg>
-            </button>
-            {openIndex === i && (
-              <div
-                id={`faq-answer-${i}`}
-                role="region"
-                aria-labelledby={`faq-btn-${i}`}
-                className="px-5 pb-5 pl-14 text-sm leading-relaxed md:px-6 md:pb-6 md:pl-[60px] md:text-[15px]"
-                style={{ color: 'var(--bone-dim)' }}
-              >
-                {item.a}
-              </div>
-            )}
-          </div>
+            </summary>
+            <div
+              id={`faq-answer-${i}`}
+              role="region"
+              aria-labelledby={`faq-btn-${i}`}
+              className="px-5 pb-5 pl-14 text-sm leading-relaxed md:px-6 md:pb-6 md:pl-[60px] md:text-[15px]"
+              style={{ color: 'var(--bone-dim)' }}
+            >
+              {item.a}
+            </div>
+          </details>
         ))}
       </div>
     </section>
