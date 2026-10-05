@@ -2,12 +2,10 @@ import { notFound } from 'next/navigation'
 import { hasLocale, getDictionary } from './dictionaries'
 import { HeroSection } from '@/components/home/HeroSection'
 import { AboutSection } from '@/components/home/AboutSection'
-import { SystemSection } from '@/components/home/SystemSection'
-import { WhyUsSection } from '@/components/home/WhyUsSection'
-import { GuideSection } from '@/components/home/GuideSection'
-import { WhoIsItForSection } from '@/components/home/WhoIsItForSection'
-import { PricingSection } from '@/components/home/PricingSection'
+import { HomeInformationSections } from '@/components/home/HomeInformationSections'
+import { HomePricingSection } from '@/components/home/HomePricingSection'
 import { ReviewsSection } from '@/components/home/ReviewsSection'
+import { BlogSection } from '@/components/home/BlogSection'
 import { FaqSection } from '@/components/home/FaqSection'
 import { CtaSection } from '@/components/home/CtaSection'
 
@@ -25,12 +23,10 @@ export default async function HomePage({ params }: Props) {
     <>
       <HeroSection dict={dict} lang={lang} />
       <AboutSection dict={dict} />
-      <SystemSection dict={dict} />
-      <WhyUsSection dict={dict} />
-      <GuideSection dict={dict} />
-      <WhoIsItForSection dict={dict} />
-      <PricingSection dict={dict} />
+      <HomeInformationSections dict={dict} lang={lang} />
+      <HomePricingSection dict={dict} lang={lang} />
       <ReviewsSection dict={dict} />
+      <BlogSection lang={lang} />
       <FaqSection dict={dict} />
       <CtaSection dict={dict} lang={lang} />
     </>
