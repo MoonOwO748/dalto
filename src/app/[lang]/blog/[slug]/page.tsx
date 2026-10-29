@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { locales, hasLocale, getDictionary } from '../../dictionaries'
-import { getHrefLangAlternates, getLocalizedUrl, getLocalizedPath, BASE_URL } from '@/lib/routes'
+import { getLocalizedUrl, getLocalizedPath, BASE_URL } from '@/lib/routes'
 import { getBlogPosts, getBlogPostBySlug } from '@/lib/blog'
 
 interface Props {
@@ -26,12 +26,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getBlogPostBySlug(slug)
   if (!post) return {}
 
-  const canonicalUrl = getLocalizedUrl(`/blog/${slug}`, lang, BASE_URL)
+  // 블로그 글은 한국어 원문만 존재하므로 모든 언어 경로의 표준 URL을 한국어 원문으로 통일한다.
+  // 번역되지 않은 페이지에 hreflang을 선언하면 Google이 중복으로 판단해 canonical을 무시한다.
+  const canonicalUrl = getLocalizedUrl(`/blog/${slug}`, 'ko', BASE_URL)
 
   return {
     title: post.title,
     description: post.excerpt,
-    alternates: getHrefLangAlternates(`/blog/${slug}`, lang, BASE_URL),
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title: `${post.title} | 강남 달토`,
       description: post.excerpt,
@@ -65,7 +67,8 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await getBlogPostBySlug(slug)
   if (!post) notFound()
 
-  const postUrl = getLocalizedUrl(`/blog/${slug}`, lang, BASE_URL)
+  // 구조화 데이터의 글 식별자도 메타데이터 canonical과 같은 한국어 원문 URL을 사용한다.
+  const postUrl = getLocalizedUrl(`/blog/${slug}`, 'ko', BASE_URL)
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -144,7 +147,7 @@ export default async function BlogPostPage({ params }: Props) {
       </nav>
 
       {/* Article Header */}
-      <header className="glass-card relative overflow-hidden rounded-3xl p-8 md:p-12">
+      <header lang="ko" className="glass-card relative overflow-hidden rounded-3xl p-8 md:p-12">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -right-16 -top-16 h-[250px] w-[250px] rounded-full opacity-20 blur-[80px]"
@@ -183,7 +186,7 @@ export default async function BlogPostPage({ params }: Props) {
       </header>
 
       {/* Article Body */}
-      <article className="glass-card mt-8 rounded-3xl p-8 md:p-12 leading-relaxed text-bone-dim">
+      <article lang="ko" className="glass-card mt-8 rounded-3xl p-8 md:p-12 leading-relaxed text-bone-dim">
         <div
           className="prose prose-invert max-w-none space-y-6 text-sm md:text-base [&>h2]:mt-8 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-bone [&>h3]:text-xl [&>h3]:font-bold [&>h3]:text-bone [&>h3]:mt-8 [&>h3]:mb-3 [&>p]:leading-relaxed [&>p]:text-bone-dim [&>strong]:text-bone [&_img]:h-auto [&_img]:w-full [&_img]:rounded-2xl [&_figcaption]:mt-3 [&_figcaption]:text-center [&_figcaption]:text-xs [&_a]:text-accent [&_a]:underline"
           dangerouslySetInnerHTML={{ __html: post.content || `<p>${post.excerpt}</p>` }}

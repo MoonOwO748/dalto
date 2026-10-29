@@ -28,24 +28,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   )
 
-  // 2. Blog post detail pages across all locales
-  const blogEntries: MetadataRoute.Sitemap = locales.flatMap((locale) =>
-    posts.map((post) => ({
-      url: getLocalizedUrl(`/blog/${post.slug}`, locale, BASE_URL),
-      lastModified: new Date(post.date || now),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-      alternates: {
-        languages: {
-          ko: getLocalizedUrl(`/blog/${post.slug}`, 'ko', BASE_URL),
-          en: getLocalizedUrl(`/blog/${post.slug}`, 'en', BASE_URL),
-          'zh-CN': getLocalizedUrl(`/blog/${post.slug}`, 'zh', BASE_URL),
-          ja: getLocalizedUrl(`/blog/${post.slug}`, 'ja', BASE_URL),
-          'x-default': getLocalizedUrl(`/blog/${post.slug}`, 'ko', BASE_URL),
-        },
-      },
-    }))
-  )
+  // 2. 블로그 글은 한국어 원문만 있으므로 표준 URL인 한국어 경로만 등록한다.
+  //    번역본이 생기기 전까지 다른 언어 경로와 hreflang은 넣지 않는다.
+  const blogEntries: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: getLocalizedUrl(`/blog/${post.slug}`, 'ko', BASE_URL),
+    lastModified: new Date(post.date || now),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
 
   return [...staticEntries, ...blogEntries]
 }
