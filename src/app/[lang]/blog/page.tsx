@@ -25,6 +25,26 @@ const blogMeta: Record<string, { title: string; description: string }> = {
   },
 }
 
+// 목록 상단 제목과 소개문도 언어별로 둔다. 글 본문은 한국어 원문만 있으므로 그 사실을 함께 알린다.
+const blogCopy: Record<string, { h1: string; intro: string }> = {
+  ko: {
+    h1: '강남 달토 소식 & 블로그',
+    intro: '강남 가라오케 이용 정보부터 주대 할인 혜택, 비즈니스 접대 노하우까지 달토의 공식 소식을 확인해 보세요.',
+  },
+  en: {
+    h1: 'AK Dalto Gangnam Blog & News',
+    intro: 'Guides to Gangnam karaoke, table charge discounts and business hosting tips from AK Dalto. Articles are currently published in Korean only.',
+  },
+  zh: {
+    h1: 'AK Dalto 江南KTV 博客与资讯',
+    intro: 'AK Dalto官方发布的江南KTV消费攻略、酒水费优惠和商务接待技巧。文章目前仅提供韩文版本。',
+  },
+  ja: {
+    h1: 'AK Dalto 江南カラオケ ブログ・お知らせ',
+    intro: 'AK Dalto公式の江南カラオケ利用ガイド、飲み代割引、接待のコツをお届けします。記事は現在韓国語のみで掲載しています。',
+  },
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
   const m = blogMeta[lang] ?? blogMeta.ko
@@ -43,7 +63,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       title: `${m.title} | 강남 달토`,
       description: m.description,
       url: getLocalizedUrl('/blog', lang, BASE_URL),
-      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Blog' }],
+      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1024, height: 478, alt: 'AK Dalto Blog' }],
     },
   }
 }
@@ -58,6 +78,7 @@ export default async function BlogPage({ params }: Props) {
 
   const dict = await getDictionary(lang)
   const posts = await getBlogPosts()
+  const c = blogCopy[lang] ?? blogCopy.ko
 
   return (
     <main className="mx-auto w-full max-w-[1440px] px-4 py-10 sm:px-8 md:px-12 lg:px-16 md:py-16">
@@ -79,11 +100,11 @@ export default async function BlogPage({ params }: Props) {
           </div>
 
           <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl md:text-5xl lg:text-6xl" style={{ color: 'var(--bone)' }}>
-            강남 달토 소식 & 블로그
+            {c.h1}
           </h1>
 
           <p className="mt-4 text-sm leading-relaxed md:text-base" style={{ color: 'var(--bone-dim)' }}>
-            강남 가라오케 이용 정보부터 주대 할인 혜택, 비즈니스 접대 노하우까지 달토의 공식 소식을 확인해 보세요.
+            {c.intro}
           </p>
         </div>
       </section>

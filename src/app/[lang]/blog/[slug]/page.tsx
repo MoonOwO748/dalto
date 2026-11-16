@@ -42,12 +42,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       publishedTime: post.date,
       authors: [post.author || 'AK 달토'],
       images: [
-        {
-          url: post.featuredImage || `${BASE_URL}/og/default.jpg`,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
+        // 글 대표 이미지는 크기가 제각각이므로 크기를 선언하지 않고, 기본 이미지일 때만 실제 크기를 적는다.
+        post.featuredImage
+          ? { url: post.featuredImage, alt: post.title }
+          : { url: `${BASE_URL}/og/default.jpg`, width: 1024, height: 478, alt: post.title },
       ],
     },
     twitter: {

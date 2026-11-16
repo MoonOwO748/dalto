@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       title: `${m.title} | 강남 달토`,
       description: m.description,
       url: getLocalizedUrl('/access', lang, BASE_URL),
-      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: 'AK Dalto Access Map' }],
+      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1024, height: 478, alt: 'AK Dalto Access Map' }],
     },
   }
 }

@@ -13,9 +13,17 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 
-const notoKR = Noto_Sans_KR({ subsets: ['latin'], weight: ['300','400','500','600','700'], variable: '--font-noto-kr', display: 'swap' })
-const notoSC = Noto_Sans_SC({ subsets: ['latin'], weight: ['300','400','500','600','700'], variable: '--font-noto-sc', display: 'swap' })
-const notoJP = Noto_Sans_JP({ subsets: ['latin'], weight: ['300','400','500','600','700'], variable: '--font-noto-jp', display: 'swap' })
+// 굵기별 정적 폰트 5종 대신 가변 폰트(굵기 생략 시 기본값) 하나를 쓴다. 굵기마다 따로 만들던
+// @font-face 규칙을 하나로 합쳐 CSS 크기를 줄이고, 굵기 800·900도 합성 없이 표시되게 한다.
+// 중국어·일본어 폰트는 한글 페이지에서 쓰이지 않으므로 미리 불러오지 않는다.
+const notoKR = Noto_Sans_KR({ subsets: ['latin'], variable: '--font-noto-kr', display: 'swap' })
+const notoSC = Noto_Sans_SC({ subsets: ['latin'], variable: '--font-noto-sc', display: 'swap', preload: false })
+const notoJP = Noto_Sans_JP({ subsets: ['latin'], variable: '--font-noto-jp', display: 'swap', preload: false })
+
+// 업체 정보는 구조화 데이터와 지도 링크에서 같은 값을 쓴다.
+// 좌표와 우편번호는 삼정호텔(봉은사로 150) 기준으로 확인한 값이다.
+const BUSINESS_ADDRESS = '서울 강남구 봉은사로 150 삼정호텔'
+const BUSINESS_GEO = { latitude: 37.5061, longitude: 127.0312 }
 
 const metaByLocale: Record<string, { title: string; description: string; ogLocale: string }> = {
   ko: {
@@ -59,7 +67,8 @@ export async function generateMetadata({ params }: Omit<LayoutProps, 'children'>
       siteName: '강남 달토',
       locale: m.ogLocale,
       type: 'website',
-      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1200, height: 630, alt: '강남 달토 가라오케 | AK Dalto Gangnam' }],
+      // 실제 이미지 크기(1024×478)를 그대로 선언한다. 1200×630 전용 이미지를 만들면 이 값도 바꾼다.
+      images: [{ url: `${BASE_URL}/og/default.jpg`, width: 1024, height: 478, alt: '강남 달토 가라오케 | AK Dalto Gangnam' }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -104,16 +113,20 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           '江南カラオケ',
         ],
         url: BASE_URL,
+        image: [`${BASE_URL}/hero.jpg`],
+        logo: `${BASE_URL}/icon.png`,
         telephone: '+82-10-5704-3097',
         address: {
           '@type': 'PostalAddress',
-          streetAddress: '역삼동 604-11 삼정호텔',
+          // 도로명 주소를 기본으로 하고, 사이트 본문에 쓰는 지번 주소를 괄호로 함께 적는다.
+          streetAddress: '봉은사로 150 (역삼동 604-11) 삼정호텔',
           addressLocality: '강남구',
           addressRegion: '서울',
-          postalCode: '06234',
+          postalCode: '06125',
           addressCountry: 'KR',
         },
-        geo: { '@type': 'GeoCoordinates', latitude: 37.4979, longitude: 127.0276 },
+        geo: { '@type': 'GeoCoordinates', ...BUSINESS_GEO },
+        hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(BUSINESS_ADDRESS)}`,
         openingHoursSpecification: [
           {
             '@type': 'OpeningHoursSpecification',
